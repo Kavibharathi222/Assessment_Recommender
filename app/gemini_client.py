@@ -14,18 +14,13 @@ If the user asks an off-topic question that is not related to hiring or SHL asse
 
 
 load_dotenv()
-_CLIENT = None
-
-
 def _get_client():
-    global _CLIENT
-    if _CLIENT is None:
-        api_key = os.getenv("GEMINI_API_KEY")
-        if api_key:
-            from google import genai
+    api_key = os.getenv("GEMINI_API_KEY")
+    if api_key:
+        from google import genai
 
-            _CLIENT = genai.Client(api_key=api_key)
-    return _CLIENT
+        return genai.Client(api_key=api_key)
+    return None
 
 
 async def generate_answer(
@@ -37,7 +32,7 @@ async def generate_answer(
     if not client or os.getenv("USE_GEMINI", "true").lower() != "true":
         return _fallback_answer(user_query, recommendations)
 
-    model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+    model = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
     try:
         prompt = f"""{SYSTEM_PROMPT}
