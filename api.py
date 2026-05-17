@@ -4,6 +4,7 @@ from functools import lru_cache
 from typing import Any
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app.catalog import load_catalog
@@ -17,6 +18,14 @@ from app.recommender import (
 
 
 app = FastAPI(title="SHL Assessment Recommender API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class ChatRequest(BaseModel):
@@ -49,7 +58,7 @@ def health() -> dict[str, Any]:
 async def chat(payload: ChatRequest) -> ChatResponse:
     products = list(_products())
     edited = apply_user_edits(payload.message, payload.current_recommendations)
-    end_of_conversation = is_confirmation(payload.message) or payload.turn_count <= 8
+    end_of_conversation = is_confirmation(payload.message) or payload.turn_count >= 8
 
     if edited != payload.current_recommendations:
         recommendations = edited
