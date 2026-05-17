@@ -4,5 +4,4 @@ google-genai>=1.0.0
 python-dotenv>=1.0.1
 requests>=2.32.3
 scikit-learn>=1.4.0
-streamlit>=1.39.0
 uvicorn>=0.30.0
