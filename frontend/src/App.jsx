@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-const API_URL = 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 function App() {
   const [healthData, setHealthData] = useState({ status: 'loading', catalog_products: 0 });
